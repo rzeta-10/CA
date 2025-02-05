@@ -1,30 +1,50 @@
-# main.py
 import sys
 from cache_simulator import FullyAssociativeCache
 import test_cases
 
+def print_cache_statistics(cache_name, cache):
+    stats = cache.get_stats()
+    total_accesses = stats['hits'] + stats['misses']
+    hit_rate = (stats['hits'] / total_accesses * 100) if total_accesses > 0 else 0
+    
+    print(f"\n{'='*20} {cache_name} Cache Statistics {'='*20}")
+    print(f"Configuration:")
+    print(f"  - Cache Size: {len(cache.cache)} blocks")
+    print(f"  - Block Size: {cache.block_size} words")
+    print(f"  - Replacement Policy: {cache.replacement_policy}")
+    print("\nPerformance Metrics:")
+    print(f"  - Total Accesses: {total_accesses}")
+    print(f"  - Cache Hits: {stats['hits']}")
+    print(f"  - Cache Misses: {stats['misses']}")
+    print(f"  - Hit Rate: {hit_rate:.2f}%")
+    print(f"  - Average Search Length: {stats['average_comparisons']:.2f}")
+
 def run_all_tests(replacement_policy, memory_size, block_size, temporal_accesses, random_accesses):
-    # We'll use a cache capacity of 128 blocks (2K words / 16 words per block)
-    capacity = 128
-
-    # Run Spatial Access Test
-    print("=" * 60)
-    cache_spatial = FullyAssociativeCache(capacity, replacement_policy)
-    accesses = test_cases.spatial_access_test(cache_spatial, memory_size, block_size)
-    print(cache_spatial)
-    print("=" * 60)
-
-    # Run Temporal Access Test (repeated access to block 0)
-    cache_temporal = FullyAssociativeCache(capacity, replacement_policy)
-    test_cases.temporal_access_test(cache_temporal, block_number=0, access_count=temporal_accesses)
-    print(cache_temporal)
-    print("=" * 60)
-
-    # Run Random Access Test
-    cache_random = FullyAssociativeCache(capacity, replacement_policy)
+    capacity = 128  # 2K words / 16 words per block
+    
+    # Spatial Access Test
+    cache_spatial = FullyAssociativeCache(capacity, replacement_policy, block_size)
+    test_cases.spatial_access_test(cache_spatial, memory_size, block_size)
+    print_cache_statistics("Spatial Access", cache_spatial)
+    
+    # Temporal Access Test
+    cache_temporal = FullyAssociativeCache(capacity, replacement_policy, block_size)
+    test_cases.temporal_access_test(cache_temporal, 0, temporal_accesses)
+    print_cache_statistics("Temporal Access", cache_temporal)
+    
+    # Random Access Test
+    cache_random = FullyAssociativeCache(capacity, replacement_policy, block_size)
     test_cases.random_access_test(cache_random, memory_size, block_size, random_accesses)
-    print(cache_random)
-    print("=" * 60)
+    print_cache_statistics("Random Access", cache_random)
+    
+    # Generate and save comparison graph
+    test_cases.plot_cache_performance(
+        cache_spatial.get_stats(),
+        cache_temporal.get_stats(),
+        cache_random.get_stats(),
+        filename='cache_performance.png'
+    )
+    print("Comparison graph saved as 'cache_performance.png'.")
 
 def main():
     # Constants for simulation
