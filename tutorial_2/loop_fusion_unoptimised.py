@@ -1,6 +1,12 @@
-# Unoptimized version: separate loops
-matrix_a = [[1, 2, 3], [4, 5, 6]]
-matrix_b = [[7, 8, 9], [10, 11, 12]]
+import numpy as np
+
+def read_matrix_from_file(filename):
+    with open(filename, "r") as f:
+        matrix = [list(map(int, line.split())) for line in f.readlines()]
+    return np.array(matrix)
+# Optimized version: single nested loop
+matrix_a = read_matrix_from_file("matrix_A.txt")
+matrix_b = read_matrix_from_file("matrix_B.txt")
 
 # First loop - Multiply elements of matrix_a by 2
 for i in range(len(matrix_a)):
