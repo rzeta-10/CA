@@ -1,22 +1,30 @@
-# Unoptimized Matrix Multiplication (no blocking)
 import numpy as np
 
-# Random 3x3 matrices
-A = np.random.randint(1, 10, (3, 3))
-B = np.random.randint(1, 10, (3, 3))
+# Read matrices from text files
+def read_matrix_from_file(filename):
+    with open(filename, "r") as f:
+        matrix = [list(map(int, line.split())) for line in f.readlines()]
+    return np.array(matrix)
 
-# Result matrix initialization
-C = np.zeros((3, 3))
+# Load matrices A and B from text files
+A = read_matrix_from_file("matrix_A.txt")
+B = read_matrix_from_file("matrix_B.txt")
 
-# Triple nested loop (unoptimized)
+C_unoptimized = np.zeros((A.shape[0], B.shape[1]))
+
+
+# Unoptimized matrix multiplication (no blocking)
 for i in range(len(A)):
     for j in range(len(B[0])):
         for k in range(len(B)):
-            C[i][j] += A[i][k] * B[k][j]
+            C_unoptimized[i][j] += A[i][k] * B[k][j]
 
+# Print results
 print("Matrix A:")
 print(A)
 print("Matrix B:")
 print(B)
+
+
 print("Result Matrix C (Unoptimized):")
-print(C)
+print(C_unoptimized)
