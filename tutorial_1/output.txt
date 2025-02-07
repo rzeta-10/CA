@@ -1,0 +1,461 @@
+
+--- Detailed Cache Performance Results ---
+Cache Size: 2048 words, Block Size: 16 words
+-------------------------------------------------
+
+Replacement Policy: FIFO
+  Access Pattern: Spatial
+    Number of Accesses: 100
+      Searches: 100
+      Misses: 7
+      Hits: 93
+      Hit Ratio: 93.00%
+      Miss Ratio: 7.00%
+    Number of Accesses: 500
+      Searches: 500
+      Misses: 32
+      Hits: 468
+      Hit Ratio: 93.60%
+      Miss Ratio: 6.40%
+    Number of Accesses: 1000
+      Searches: 1000
+      Misses: 63
+      Hits: 937
+      Hit Ratio: 93.70%
+      Miss Ratio: 6.30%
+    Number of Accesses: 2000
+      Searches: 2000
+      Misses: 125
+      Hits: 1875
+      Hit Ratio: 93.75%
+      Miss Ratio: 6.25%
+    Number of Accesses: 5000
+      Searches: 5000
+      Misses: 313
+      Hits: 4687
+      Hit Ratio: 93.74%
+      Miss Ratio: 6.26%
+    Number of Accesses: 10000
+      Searches: 10000
+      Misses: 625
+      Hits: 9375
+      Hit Ratio: 93.75%
+      Miss Ratio: 6.25%
+    Number of Accesses: 50000
+      Searches: 50000
+      Misses: 3125
+      Hits: 46875
+      Hit Ratio: 93.75%
+      Miss Ratio: 6.25%
+    Number of Accesses: 100000
+      Searches: 100000
+      Misses: 6250
+      Hits: 93750
+      Hit Ratio: 93.75%
+      Miss Ratio: 6.25%
+----------------------------------------
+  Access Pattern: Temporal
+    Number of Accesses: 100
+      Searches: 100
+      Misses: 2
+      Hits: 98
+      Hit Ratio: 98.00%
+      Miss Ratio: 2.00%
+    Number of Accesses: 500
+      Searches: 500
+      Misses: 2
+      Hits: 498
+      Hit Ratio: 99.60%
+      Miss Ratio: 0.40%
+    Number of Accesses: 1000
+      Searches: 1000
+      Misses: 3
+      Hits: 997
+      Hit Ratio: 99.70%
+      Miss Ratio: 0.30%
+    Number of Accesses: 2000
+      Searches: 2000
+      Misses: 5
+      Hits: 1995
+      Hit Ratio: 99.75%
+      Miss Ratio: 0.25%
+    Number of Accesses: 5000
+      Searches: 5000
+      Misses: 8
+      Hits: 4992
+      Hit Ratio: 99.84%
+      Miss Ratio: 0.16%
+    Number of Accesses: 10000
+      Searches: 10000
+      Misses: 14
+      Hits: 9986
+      Hit Ratio: 99.86%
+      Miss Ratio: 0.14%
+    Number of Accesses: 50000
+      Searches: 50000
+      Misses: 60
+      Hits: 49940
+      Hit Ratio: 99.88%
+      Miss Ratio: 0.12%
+    Number of Accesses: 100000
+      Searches: 100000
+      Misses: 128
+      Hits: 99872
+      Hit Ratio: 99.87%
+      Miss Ratio: 0.13%
+----------------------------------------
+  Access Pattern: Random
+    Number of Accesses: 100
+      Searches: 100
+      Misses: 96
+      Hits: 4
+      Hit Ratio: 4.00%
+      Miss Ratio: 96.00%
+    Number of Accesses: 500
+      Searches: 500
+      Misses: 485
+      Hits: 15
+      Hit Ratio: 3.00%
+      Miss Ratio: 97.00%
+    Number of Accesses: 1000
+      Searches: 1000
+      Misses: 972
+      Hits: 28
+      Hit Ratio: 2.80%
+      Miss Ratio: 97.20%
+    Number of Accesses: 2000
+      Searches: 2000
+      Misses: 1947
+      Hits: 53
+      Hit Ratio: 2.65%
+      Miss Ratio: 97.35%
+    Number of Accesses: 5000
+      Searches: 5000
+      Misses: 4845
+      Hits: 155
+      Hit Ratio: 3.10%
+      Miss Ratio: 96.90%
+    Number of Accesses: 10000
+      Searches: 10000
+      Misses: 9706
+      Hits: 294
+      Hit Ratio: 2.94%
+      Miss Ratio: 97.06%
+    Number of Accesses: 50000
+      Searches: 50000
+      Misses: 48389
+      Hits: 1611
+      Hit Ratio: 3.22%
+      Miss Ratio: 96.78%
+    Number of Accesses: 100000
+      Searches: 100000
+      Misses: 96900
+      Hits: 3100
+      Hit Ratio: 3.10%
+      Miss Ratio: 96.90%
+----------------------------------------
+==================================================
+Replacement Policy: LRU
+  Access Pattern: Spatial
+    Number of Accesses: 100
+      Searches: 100
+      Misses: 7
+      Hits: 93
+      Hit Ratio: 93.00%
+      Miss Ratio: 7.00%
+    Number of Accesses: 500
+      Searches: 500
+      Misses: 32
+      Hits: 468
+      Hit Ratio: 93.60%
+      Miss Ratio: 6.40%
+    Number of Accesses: 1000
+      Searches: 1000
+      Misses: 63
+      Hits: 937
+      Hit Ratio: 93.70%
+      Miss Ratio: 6.30%
+    Number of Accesses: 2000
+      Searches: 2000
+      Misses: 125
+      Hits: 1875
+      Hit Ratio: 93.75%
+      Miss Ratio: 6.25%
+    Number of Accesses: 5000
+      Searches: 5000
+      Misses: 313
+      Hits: 4687
+      Hit Ratio: 93.74%
+      Miss Ratio: 6.26%
+    Number of Accesses: 10000
+      Searches: 10000
+      Misses: 625
+      Hits: 9375
+      Hit Ratio: 93.75%
+      Miss Ratio: 6.25%
+    Number of Accesses: 50000
+      Searches: 50000
+      Misses: 3125
+      Hits: 46875
+      Hit Ratio: 93.75%
+      Miss Ratio: 6.25%
+    Number of Accesses: 100000
+      Searches: 100000
+      Misses: 6250
+      Hits: 93750
+      Hit Ratio: 93.75%
+      Miss Ratio: 6.25%
+----------------------------------------
+  Access Pattern: Temporal
+    Number of Accesses: 100
+      Searches: 100
+      Misses: 2
+      Hits: 98
+      Hit Ratio: 98.00%
+      Miss Ratio: 2.00%
+    Number of Accesses: 500
+      Searches: 500
+      Misses: 2
+      Hits: 498
+      Hit Ratio: 99.60%
+      Miss Ratio: 0.40%
+    Number of Accesses: 1000
+      Searches: 1000
+      Misses: 3
+      Hits: 997
+      Hit Ratio: 99.70%
+      Miss Ratio: 0.30%
+    Number of Accesses: 2000
+      Searches: 2000
+      Misses: 5
+      Hits: 1995
+      Hit Ratio: 99.75%
+      Miss Ratio: 0.25%
+    Number of Accesses: 5000
+      Searches: 5000
+      Misses: 8
+      Hits: 4992
+      Hit Ratio: 99.84%
+      Miss Ratio: 0.16%
+    Number of Accesses: 10000
+      Searches: 10000
+      Misses: 14
+      Hits: 9986
+      Hit Ratio: 99.86%
+      Miss Ratio: 0.14%
+    Number of Accesses: 50000
+      Searches: 50000
+      Misses: 60
+      Hits: 49940
+      Hit Ratio: 99.88%
+      Miss Ratio: 0.12%
+    Number of Accesses: 100000
+      Searches: 100000
+      Misses: 128
+      Hits: 99872
+      Hit Ratio: 99.87%
+      Miss Ratio: 0.13%
+----------------------------------------
+  Access Pattern: Random
+    Number of Accesses: 100
+      Searches: 100
+      Misses: 96
+      Hits: 4
+      Hit Ratio: 4.00%
+      Miss Ratio: 96.00%
+    Number of Accesses: 500
+      Searches: 500
+      Misses: 485
+      Hits: 15
+      Hit Ratio: 3.00%
+      Miss Ratio: 97.00%
+    Number of Accesses: 1000
+      Searches: 1000
+      Misses: 972
+      Hits: 28
+      Hit Ratio: 2.80%
+      Miss Ratio: 97.20%
+    Number of Accesses: 2000
+      Searches: 2000
+      Misses: 1946
+      Hits: 54
+      Hit Ratio: 2.70%
+      Miss Ratio: 97.30%
+    Number of Accesses: 5000
+      Searches: 5000
+      Misses: 4846
+      Hits: 154
+      Hit Ratio: 3.08%
+      Miss Ratio: 96.92%
+    Number of Accesses: 10000
+      Searches: 10000
+      Misses: 9703
+      Hits: 297
+      Hit Ratio: 2.97%
+      Miss Ratio: 97.03%
+    Number of Accesses: 50000
+      Searches: 50000
+      Misses: 48386
+      Hits: 1614
+      Hit Ratio: 3.23%
+      Miss Ratio: 96.77%
+    Number of Accesses: 100000
+      Searches: 100000
+      Misses: 96908
+      Hits: 3092
+      Hit Ratio: 3.09%
+      Miss Ratio: 96.91%
+----------------------------------------
+==================================================
+Replacement Policy: Random
+  Access Pattern: Spatial
+    Number of Accesses: 100
+      Searches: 100
+      Misses: 7
+      Hits: 93
+      Hit Ratio: 93.00%
+      Miss Ratio: 7.00%
+    Number of Accesses: 500
+      Searches: 500
+      Misses: 32
+      Hits: 468
+      Hit Ratio: 93.60%
+      Miss Ratio: 6.40%
+    Number of Accesses: 1000
+      Searches: 1000
+      Misses: 63
+      Hits: 937
+      Hit Ratio: 93.70%
+      Miss Ratio: 6.30%
+    Number of Accesses: 2000
+      Searches: 2000
+      Misses: 125
+      Hits: 1875
+      Hit Ratio: 93.75%
+      Miss Ratio: 6.25%
+    Number of Accesses: 5000
+      Searches: 5000
+      Misses: 313
+      Hits: 4687
+      Hit Ratio: 93.74%
+      Miss Ratio: 6.26%
+    Number of Accesses: 10000
+      Searches: 10000
+      Misses: 625
+      Hits: 9375
+      Hit Ratio: 93.75%
+      Miss Ratio: 6.25%
+    Number of Accesses: 50000
+      Searches: 50000
+      Misses: 3125
+      Hits: 46875
+      Hit Ratio: 93.75%
+      Miss Ratio: 6.25%
+    Number of Accesses: 100000
+      Searches: 100000
+      Misses: 6250
+      Hits: 93750
+      Hit Ratio: 93.75%
+      Miss Ratio: 6.25%
+----------------------------------------
+  Access Pattern: Temporal
+    Number of Accesses: 100
+      Searches: 100
+      Misses: 2
+      Hits: 98
+      Hit Ratio: 98.00%
+      Miss Ratio: 2.00%
+    Number of Accesses: 500
+      Searches: 500
+      Misses: 2
+      Hits: 498
+      Hit Ratio: 99.60%
+      Miss Ratio: 0.40%
+    Number of Accesses: 1000
+      Searches: 1000
+      Misses: 3
+      Hits: 997
+      Hit Ratio: 99.70%
+      Miss Ratio: 0.30%
+    Number of Accesses: 2000
+      Searches: 2000
+      Misses: 5
+      Hits: 1995
+      Hit Ratio: 99.75%
+      Miss Ratio: 0.25%
+    Number of Accesses: 5000
+      Searches: 5000
+      Misses: 8
+      Hits: 4992
+      Hit Ratio: 99.84%
+      Miss Ratio: 0.16%
+    Number of Accesses: 10000
+      Searches: 10000
+      Misses: 14
+      Hits: 9986
+      Hit Ratio: 99.86%
+      Miss Ratio: 0.14%
+    Number of Accesses: 50000
+      Searches: 50000
+      Misses: 60
+      Hits: 49940
+      Hit Ratio: 99.88%
+      Miss Ratio: 0.12%
+    Number of Accesses: 100000
+      Searches: 100000
+      Misses: 128
+      Hits: 99872
+      Hit Ratio: 99.87%
+      Miss Ratio: 0.13%
+----------------------------------------
+  Access Pattern: Random
+    Number of Accesses: 100
+      Searches: 100
+      Misses: 96
+      Hits: 4
+      Hit Ratio: 4.00%
+      Miss Ratio: 96.00%
+    Number of Accesses: 500
+      Searches: 500
+      Misses: 485
+      Hits: 15
+      Hit Ratio: 3.00%
+      Miss Ratio: 97.00%
+    Number of Accesses: 1000
+      Searches: 1000
+      Misses: 974
+      Hits: 26
+      Hit Ratio: 2.60%
+      Miss Ratio: 97.40%
+    Number of Accesses: 2000
+      Searches: 2000
+      Misses: 1941
+      Hits: 59
+      Hit Ratio: 2.95%
+      Miss Ratio: 97.05%
+    Number of Accesses: 5000
+      Searches: 5000
+      Misses: 4831
+      Hits: 169
+      Hit Ratio: 3.38%
+      Miss Ratio: 96.62%
+    Number of Accesses: 10000
+      Searches: 10000
+      Misses: 9720
+      Hits: 280
+      Hit Ratio: 2.80%
+      Miss Ratio: 97.20%
+    Number of Accesses: 50000
+      Searches: 50000
+      Misses: 48375
+      Hits: 1625
+      Hit Ratio: 3.25%
+      Miss Ratio: 96.75%
+    Number of Accesses: 100000
+      Searches: 100000
+      Misses: 96964
+      Hits: 3036
+      Hit Ratio: 3.04%
+      Miss Ratio: 96.96%
+----------------------------------------
+==================================================
