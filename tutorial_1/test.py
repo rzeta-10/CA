@@ -1,38 +1,37 @@
 import matplotlib
-matplotlib.use('Agg')  # *** ADDED: Use Agg backend to avoid GTK issues ***
+matplotlib.use('Agg')  # Use Agg backend for non-interactive plotting
 import matplotlib.pyplot as plt
 import random
-from collections import deque
 
+# --- Cache Simulator Classes ---
 class CacheLine:
     def __init__(self, tag=None, valid=False, dirty=False):
         self.tag = tag
         self.valid = valid
         self.dirty = dirty
-        self.lru_counter = 0 # For LRU replacement
+        self.lru_counter = 0  # For LRU replacement
 
 class FullyAssociativeCache:
     def __init__(self, cache_size_words, block_size_words, replacement_policy='FIFO'):
         self.cache_size_lines = cache_size_words // block_size_words
         self.block_size_words = block_size_words
         self.replacement_policy = replacement_policy
+        # For FIFO and Random we maintain a list; for LRU the lru_counter is used.
         self.cache = [CacheLine() for _ in range(self.cache_size_lines)]
         self.cache_lines_used = 0
         self.misses = 0
         self.searches = 0
         self.hits = 0
-        self.lru_counter = 0 # Global LRU counter
+        self.lru_counter = 0  # Global counter for LRU
 
     def address_breakdown(self, address):
-        """Breaks down the address into tag and block offset."""
-        block_offset_bits = 4  # log2(16) as block size is 16 words
-        block_offset_mask = (1 << block_offset_bits) - 1
-        block_offset = address & block_offset_mask
+        """Break down the address into tag (using 4 bits for the offset since block size is 16 words)."""
+        block_offset_bits = 4  # log2(16)
         tag = address >> block_offset_bits
         return tag
 
     def search_cache(self, tag, access_index):
-        """Searches the cache for a given tag. Returns True on hit, False on miss."""
+        """Search for the tag in cache. Update LRU counter if needed."""
         self.searches += 1
         for i in range(len(self.cache)):
             line = self.cache[i]
@@ -41,12 +40,12 @@ class FullyAssociativeCache:
                 if self.replacement_policy == 'LRU':
                     self.cache[i].lru_counter = self.lru_counter
                     self.lru_counter += 1
-                return True  # Cache hit
-        return False         # Cache miss
+                return True  # Hit
+        return False  # Miss
 
     def add_to_cache(self, tag):
-        """Adds a tag to the cache based on the replacement policy."""
-        # First, try to find an invalid line
+        """Insert the tag into the cache; if full, replace an existing line."""
+        # Look for an empty (invalid) line first.
         for i in range(self.cache_size_lines):
             if not self.cache[i].valid:
                 self.cache[i] = CacheLine(tag=tag, valid=True, dirty=False)
@@ -56,7 +55,7 @@ class FullyAssociativeCache:
                 self.cache_lines_used += 1
                 return
 
-        # Cache is full, implement replacement policy
+        # Otherwise, apply the chosen replacement policy.
         if self.replacement_policy == 'FIFO':
             self._replace_fifo(tag)
         elif self.replacement_policy == 'LRU':
@@ -65,47 +64,41 @@ class FullyAssociativeCache:
             self._replace_random(tag)
 
     def _replace_fifo(self, tag):
-        """FIFO replacement policy."""
-        replaced_line = self.cache.pop(0) # Remove the first line (FIFO)
+        """FIFO replacement: remove the first cache line and append a new one."""
+        replaced_line = self.cache.pop(0)
         if replaced_line.dirty:
-            pass # Simulate write-back if needed
-
-        self.cache.append(CacheLine(tag=tag, valid=True, dirty=False)) # Add new line at the end
-        if self.replacement_policy == 'LRU':
+            pass  # Write-back simulation if needed.
+        self.cache.append(CacheLine(tag=tag, valid=True, dirty=False))
+        if self.replacement_policy == 'LRU':  # Not expected to run, but for consistency.
             self.cache[-1].lru_counter = self.lru_counter
             self.lru_counter += 1
 
-
     def _replace_lru(self, tag):
-        """LRU replacement policy."""
+        """LRU replacement: replace the cache line with the smallest LRU counter."""
         lru_index = 0
         min_lru_counter = self.cache[0].lru_counter
         for i in range(1, self.cache_size_lines):
             if self.cache[i].lru_counter < min_lru_counter:
                 min_lru_counter = self.cache[i].lru_counter
                 lru_index = i
-
         if self.cache[lru_index].dirty:
-            pass # Simulate write-back if needed
-
+            pass  # Write-back simulation if needed.
         self.cache[lru_index] = CacheLine(tag=tag, valid=True, dirty=False)
         self.cache[lru_index].lru_counter = self.lru_counter
         self.lru_counter += 1
 
-
     def _replace_random(self, tag):
-        """Random replacement policy."""
+        """Random replacement: randomly choose a cache line to replace."""
         replace_index = random.randint(0, self.cache_size_lines - 1)
         if self.cache[replace_index].dirty:
-            pass # Simulate write-back if needed
+            pass  # Write-back simulation if needed.
         self.cache[replace_index] = CacheLine(tag=tag, valid=True, dirty=False)
-        if self.replacement_policy == 'LRU': # although it is random policy , but still update lru counter to maintain consistency in class
+        if self.replacement_policy == 'LRU':
             self.cache[replace_index].lru_counter = self.lru_counter
             self.lru_counter += 1
 
-
     def access_memory(self, address, access_index, operation_type='read'):
-        """Simulates a memory access."""
+        """Simulate a memory access: check cache and update accordingly."""
         tag = self.address_breakdown(address)
         if self.search_cache(tag, access_index):
             if operation_type == 'write':
@@ -120,19 +113,19 @@ class FullyAssociativeCache:
             return "Miss"
 
     def simulate_accesses(self, access_sequence, operation_sequence=None):
-        """Simulates a sequence of memory accesses."""
+        """Run a series of accesses and record results."""
         results = []
         if operation_sequence is None:
             operation_sequence = ['read'] * len(access_sequence)
         for i in range(len(access_sequence)):
             address = access_sequence[i]
             operation = operation_sequence[i]
-            result = self.access_memory(address, i, operation) # Pass access index for LRU
+            result = self.access_memory(address, i, operation)
             results.append((address, operation, result))
         return results
 
     def get_performance_metrics(self):
-        """Calculates and returns performance metrics."""
+        """Return performance metrics including hit and miss ratios."""
         searches = self.searches
         misses = self.misses
         hits = self.hits
@@ -147,121 +140,147 @@ class FullyAssociativeCache:
         }
 
     def reset_metrics(self):
-        """Resets performance metrics for a new simulation run."""
+        """Reset metrics and cache state for a new simulation run."""
         self.misses = 0
         self.searches = 0
         self.hits = 0
         self.lru_counter = 0
-        self.cache = [CacheLine() for _ in range(self.cache_size_lines)] # reset cache lines also
+        self.cache = [CacheLine() for _ in range(self.cache_size_lines)]
         self.cache_lines_used = 0
 
 # --- Access Pattern Generators ---
 def generate_spatial_accesses(num_accesses, start_address=0, step=1):
+    """Generate a sequence of spatially contiguous addresses."""
     return list(range(start_address, start_address + num_accesses * step, step))
 
-def generate_temporal_accesses(num_accesses, base_addresses=[20, 21, 22], repeat_pattern=[1, 1, 1, 2, 2, 3]):
+def generate_temporal_accesses(num_accesses, base_addresses=[20, 21, 22, 23, 24, 25],
+                               hot_prob=0.98, cold_start=10000):
+    """
+    Generate a temporal access sequence that mixes frequent (hot) accesses with occasional (cold) ones.
+    With probability hot_prob (default 98%), one of the base (hot) addresses is chosen.
+    With probability (1 - hot_prob) (default 2%), a new (cold) address is generated.
+    """
     access_sequence = []
-    pattern_len = len(repeat_pattern)
-    base_len = len(base_addresses)
+    cold_addr = cold_start
     for i in range(num_accesses):
-        base_index = repeat_pattern[i % pattern_len] - 1 # -1 to adjust index to start from 0
-        access_sequence.append(base_addresses[base_index % base_len]) # Modulo for base address selection
+        if random.random() < hot_prob:
+            access_sequence.append(random.choice(base_addresses))
+        else:
+            access_sequence.append(cold_addr)
+            cold_addr += 1
     return access_sequence
 
-
 def generate_random_accesses(num_accesses, memory_size_words):
+    """Generate a sequence of random addresses."""
     return [random.randint(0, memory_size_words - 1) for _ in range(num_accesses)]
 
 # --- Simulation Parameters ---
 main_memory_size_words = 64 * 1024
 cache_size_words = 2 * 1024
 block_size_words = 16
-num_accesses = 1000
+
 replacement_policies = ['FIFO', 'LRU', 'Random']
 access_pattern_names = ['Spatial', 'Temporal', 'Random']
-access_patterns = {
-    'Spatial': generate_spatial_accesses(num_accesses),
-    'Temporal': generate_temporal_accesses(num_accesses),
-    'Random': generate_random_accesses(num_accesses, main_memory_size_words)
+# Different numbers of accesses to simulate:
+num_accesses_list = [100, 500, 1000, 2000, 5000, 10000, 50000, 100000]
+
+# --- Run Simulations for Each Case ---
+# We'll store the hit and miss ratios for each access pattern and replacement policy.
+results_by_pattern = {
+    pattern: {
+        policy: {'hit_ratio': [], 'miss_ratio': []}
+        for policy in replacement_policies
+    }
+    for pattern in access_pattern_names
 }
 
-results_data = {}
+# Also store full details for printing to the terminal.
+details_by_pattern = {
+    pattern: {
+        policy: []
+        for policy in replacement_policies
+    }
+    for pattern in access_pattern_names
+}
 
-# --- Run Simulations and Collect Data ---
-for policy_name in replacement_policies:
-    results_data[policy_name] = {}
-    for pattern_name in access_pattern_names:
-        cache = FullyAssociativeCache(cache_size_words, block_size_words, replacement_policy=policy_name)
-        access_sequence = access_patterns[pattern_name]
-        cache.simulate_accesses(access_sequence)
-        metrics = cache.get_performance_metrics()
-        results_data[policy_name][pattern_name] = metrics
-        results_data[policy_name][pattern_name]['access_sequence_length'] = len(access_sequence)
+for pattern in access_pattern_names:
+    for num_accesses in num_accesses_list:
+        # Generate the access sequence based on the chosen pattern.
+        if pattern == 'Spatial':
+            access_sequence = generate_spatial_accesses(num_accesses)
+        elif pattern == 'Temporal':
+            # For the temporal pattern we use our modified generator.
+            # Warm up the cache with the hot set before simulation.
+            hot_set = [20, 21, 22, 23, 24, 25]
+            access_sequence = generate_temporal_accesses(num_accesses, base_addresses=hot_set,
+                                                           hot_prob=0.98, cold_start=10000)
+        elif pattern == 'Random':
+            access_sequence = generate_random_accesses(num_accesses, main_memory_size_words)
+        # For each replacement policy, simulate and record the metrics.
+        for policy in replacement_policies:
+            cache = FullyAssociativeCache(cache_size_words, block_size_words, replacement_policy=policy)
+            if pattern == 'Temporal':
+                # Warm up the cache with several passes over the hot addresses.
+                hot_set = [20, 21, 22, 23, 24, 25]
+                warmup_sequence = hot_set * 10  # Repeat a few times to load hot_set into cache
+                cache.simulate_accesses(warmup_sequence)
+                cache.reset_metrics()
+            cache.simulate_accesses(access_sequence)
+            metrics = cache.get_performance_metrics()
+            results_by_pattern[pattern][policy]['hit_ratio'].append(metrics['hit_ratio'])
+            results_by_pattern[pattern][policy]['miss_ratio'].append(metrics['miss_ratio'])
+            details_by_pattern[pattern][policy].append(metrics)
 
+# --- Plotting Graphs Separately ---
+# For each access pattern, we now generate two separate figures:
+# one for the hit ratio and one for the miss ratio.
+for pattern in access_pattern_names:
+    # Hit Ratio Graph for this pattern
+    plt.figure(figsize=(8, 6))
+    for policy in replacement_policies:
+        hit_ratios = results_by_pattern[pattern][policy]['hit_ratio']
+        plt.plot(num_accesses_list, hit_ratios, marker='o', label=policy)
+    plt.xscale('log')
+    plt.title(f'{pattern} Access Pattern - Hit Ratio')
+    plt.xlabel('Number of Accesses (log scale)')
+    plt.ylabel('Hit Ratio (%)')
+    plt.grid(True, which="both", ls="--")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(f'cache_performance_{pattern.lower()}_hit_ratio.png')
+    plt.close()
 
-# --- Print Terminal Results ---
-print("--- Cache Performance Results ---")
-print(f"Cache Size: {cache_size_words} words, Block Size: {block_size_words} words, Accesses: {num_accesses}\n")
+    # Miss Ratio Graph for this pattern
+    plt.figure(figsize=(8, 6))
+    for policy in replacement_policies:
+        miss_ratios = results_by_pattern[pattern][policy]['miss_ratio']
+        plt.plot(num_accesses_list, miss_ratios, marker='o', label=policy)
+    plt.xscale('log')
+    plt.title(f'{pattern} Access Pattern - Miss Ratio')
+    plt.xlabel('Number of Accesses (log scale)')
+    plt.ylabel('Miss Ratio (%)')
+    plt.grid(True, which="both", ls="--")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(f'cache_performance_{pattern.lower()}_miss_ratio.png')
+    plt.close()
 
-for policy_name in replacement_policies:
-    print(f"Replacement Policy: {policy_name}")
-    for pattern_name in access_pattern_names:
-        metrics = results_data[policy_name][pattern_name]
-        print(f"  Access Pattern: {pattern_name}")
-        print(f"    Searches: {metrics['searches']}")
-        print(f"    Misses: {metrics['misses']}")
-        print(f"    Hits: {metrics['hits']}")
-        print(f"    Hit Ratio: {metrics['hit_ratio']:.2f}%")
-        print(f"    Miss Ratio: {metrics['miss_ratio']:.2f}%")
-    print("-" * 30)
+# --- Print Details to Terminal ---
+print("\n--- Detailed Cache Performance Results ---")
+print(f"Cache Size: {cache_size_words} words, Block Size: {block_size_words} words")
+print("-------------------------------------------------\n")
 
-# --- Plotting ---
-bar_width = 0.25
-x_positions = range(len(access_pattern_names))
-
-fig, ax = plt.subplots(figsize=(10, 6))
-
-for i, policy_name in enumerate(replacement_policies):
-    hit_ratios = [results_data[policy_name][pattern_name]['hit_ratio'] for pattern_name in access_pattern_names]
-    position = [x + bar_width * i for x in x_positions]
-    ax.bar(position, hit_ratios, bar_width, label=policy_name)
-
-ax.set_xlabel("Access Patterns")
-ax.set_ylabel("Hit Ratio (%)")
-ax.set_title("Cache Hit Ratio Comparison by Replacement Policy and Access Pattern")
-ax.set_xticks([x + bar_width for x in x_positions])
-ax.set_xticklabels(access_pattern_names)
-ax.legend()
-ax.grid(axis='y', linestyle='--')
-plt.tight_layout()
-
-# Save as PNG
-plt.savefig('cache_hit_ratio_comparison.png')
-# Save as JPEG
-# plt.savefig('cache_hit_ratio_comparison.jpeg') # or 'cache_hit_ratio_comparison.jpg'
-
-plt.show()
-
-
-fig, ax = plt.subplots(figsize=(10, 6))
-
-for i, policy_name in enumerate(replacement_policies):
-    miss_ratios = [results_data[policy_name][pattern_name]['miss_ratio'] for pattern_name in access_pattern_names]
-    position = [x + bar_width * i for x in x_positions]
-    ax.bar(position, miss_ratios, bar_width, label=policy_name)
-
-ax.set_xlabel("Access Patterns")
-ax.set_ylabel("Miss Ratio (%)")
-ax.set_title("Cache Miss Ratio Comparison by Replacement Policy and Access Pattern")
-ax.set_xticks([x + bar_width for x in x_positions])
-ax.set_xticklabels(access_pattern_names)
-ax.legend()
-ax.grid(axis='y', linestyle='--')
-plt.tight_layout()
-
-# Save as PNG
-plt.savefig('cache_miss_ratio_comparison.png')
-# Save as JPEG
-# plt.savefig('cache_miss_ratio_comparison.jpeg') # or 'cache_miss_ratio_comparison.jpg'
-
-plt.show()
+for policy in replacement_policies:
+    print(f"Replacement Policy: {policy}")
+    for pattern in access_pattern_names:
+        print(f"  Access Pattern: {pattern}")
+        for i, num_accesses in enumerate(num_accesses_list):
+            metrics = details_by_pattern[pattern][policy][i]
+            print(f"    Number of Accesses: {num_accesses}")
+            print(f"      Searches: {metrics['searches']}")
+            print(f"      Misses: {metrics['misses']}")
+            print(f"      Hits: {metrics['hits']}")
+            print(f"      Hit Ratio: {metrics['hit_ratio']:.2f}%")
+            print(f"      Miss Ratio: {metrics['miss_ratio']:.2f}%")
+        print("-" * 40)
+    print("=" * 50)
