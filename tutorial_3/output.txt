@@ -1,0 +1,257 @@
+
+--- Multi-Level Cache Performance Results ---
+Configuration:
+  L1 Cache: Direct Mapped, 2K words, 16-word blocks
+  L2 Cache: 4-Way Set Associative, 16K words, 16-word blocks
+  Main Memory: 64K words
+  Write Buffer: 4 Blocks
+  Victim Cache: 4 Blocks
+  Prefetch Cache: Instruction and Data (each 4 Blocks)
+----------------------------------------------------
+
+Access Pattern: Spatial
+  Number of Accesses: 100
+    Total Accesses         : 100
+    L1 Hits                : 0
+    Victim Cache Hits      : 0
+    L2 Hits                : 0
+    Prefetch Hits          : 54
+    Main Memory Accesses   : 46
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 54.00%
+    Miss Ratio             : 46.00%
+  Number of Accesses: 500
+    Total Accesses         : 500
+    L1 Hits                : 0
+    Victim Cache Hits      : 0
+    L2 Hits                : 0
+    Prefetch Hits          : 255
+    Main Memory Accesses   : 245
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 51.00%
+    Miss Ratio             : 49.00%
+  Number of Accesses: 1000
+    Total Accesses         : 1000
+    L1 Hits                : 0
+    Victim Cache Hits      : 0
+    L2 Hits                : 0
+    Prefetch Hits          : 480
+    Main Memory Accesses   : 520
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 48.00%
+    Miss Ratio             : 52.00%
+  Number of Accesses: 2000
+    Total Accesses         : 2000
+    L1 Hits                : 0
+    Victim Cache Hits      : 0
+    L2 Hits                : 0
+    Prefetch Hits          : 1015
+    Main Memory Accesses   : 985
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 50.75%
+    Miss Ratio             : 49.25%
+  Number of Accesses: 5000
+    Total Accesses         : 5000
+    L1 Hits                : 0
+    Victim Cache Hits      : 0
+    L2 Hits                : 0
+    Prefetch Hits          : 2548
+    Main Memory Accesses   : 2452
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 50.96%
+    Miss Ratio             : 49.04%
+  Number of Accesses: 10000
+    Total Accesses         : 10000
+    L1 Hits                : 0
+    Victim Cache Hits      : 0
+    L2 Hits                : 0
+    Prefetch Hits          : 5062
+    Main Memory Accesses   : 4938
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 50.62%
+    Miss Ratio             : 49.38%
+  Number of Accesses: 50000
+    Total Accesses         : 50000
+    L1 Hits                : 0
+    Victim Cache Hits      : 0
+    L2 Hits                : 0
+    Prefetch Hits          : 25126
+    Main Memory Accesses   : 24874
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 50.25%
+    Miss Ratio             : 49.75%
+  Number of Accesses: 100000
+    Total Accesses         : 100000
+    L1 Hits                : 0
+    Victim Cache Hits      : 0
+    L2 Hits                : 0
+    Prefetch Hits          : 49809
+    Main Memory Accesses   : 50191
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 49.81%
+    Miss Ratio             : 50.19%
+==================================================
+Access Pattern: Temporal
+  Number of Accesses: 100
+    Total Accesses         : 100
+    L1 Hits                : 56
+    Victim Cache Hits      : 0
+    L2 Hits                : 0
+    Prefetch Hits          : 39
+    Main Memory Accesses   : 5
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 95.00%
+    Miss Ratio             : 5.00%
+  Number of Accesses: 500
+    Total Accesses         : 500
+    L1 Hits                : 309
+    Victim Cache Hits      : 0
+    L2 Hits                : 0
+    Prefetch Hits          : 175
+    Main Memory Accesses   : 16
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 96.80%
+    Miss Ratio             : 3.20%
+  Number of Accesses: 1000
+    Total Accesses         : 1000
+    L1 Hits                : 586
+    Victim Cache Hits      : 0
+    L2 Hits                : 0
+    Prefetch Hits          : 393
+    Main Memory Accesses   : 21
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 97.90%
+    Miss Ratio             : 2.10%
+  Number of Accesses: 2000
+    Total Accesses         : 2000
+    L1 Hits                : 1164
+    Victim Cache Hits      : 1
+    L2 Hits                : 1
+    Prefetch Hits          : 795
+    Main Memory Accesses   : 39
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 98.05%
+    Miss Ratio             : 1.95%
+  Number of Accesses: 5000
+    Total Accesses         : 5000
+    L1 Hits                : 2908
+    Victim Cache Hits      : 2
+    L2 Hits                : 0
+    Prefetch Hits          : 2003
+    Main Memory Accesses   : 87
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 98.26%
+    Miss Ratio             : 1.74%
+  Number of Accesses: 10000
+    Total Accesses         : 10000
+    L1 Hits                : 5883
+    Victim Cache Hits      : 6
+    L2 Hits                : 0
+    Prefetch Hits          : 3944
+    Main Memory Accesses   : 167
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 98.33%
+    Miss Ratio             : 1.67%
+  Number of Accesses: 50000
+    Total Accesses         : 50000
+    L1 Hits                : 29080
+    Victim Cache Hits      : 16
+    L2 Hits                : 3
+    Prefetch Hits          : 20115
+    Main Memory Accesses   : 786
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 98.43%
+    Miss Ratio             : 1.57%
+  Number of Accesses: 100000
+    Total Accesses         : 100000
+    L1 Hits                : 58260
+    Victim Cache Hits      : 43
+    L2 Hits                : 0
+    Prefetch Hits          : 40090
+    Main Memory Accesses   : 1607
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 98.39%
+    Miss Ratio             : 1.61%
+==================================================
+Access Pattern: Random
+  Number of Accesses: 100
+    Total Accesses         : 100
+    L1 Hits                : 0
+    Victim Cache Hits      : 0
+    L2 Hits                : 0
+    Prefetch Hits          : 0
+    Main Memory Accesses   : 100
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 0.00%
+    Miss Ratio             : 100.00%
+  Number of Accesses: 500
+    Total Accesses         : 500
+    L1 Hits                : 14
+    Victim Cache Hits      : 0
+    L2 Hits                : 12
+    Prefetch Hits          : 0
+    Main Memory Accesses   : 474
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 5.20%
+    Miss Ratio             : 94.80%
+  Number of Accesses: 1000
+    Total Accesses         : 1000
+    L1 Hits                : 38
+    Victim Cache Hits      : 2
+    L2 Hits                : 90
+    Prefetch Hits          : 1
+    Main Memory Accesses   : 869
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 13.10%
+    Miss Ratio             : 86.90%
+  Number of Accesses: 2000
+    Total Accesses         : 2000
+    L1 Hits                : 60
+    Victim Cache Hits      : 2
+    L2 Hits                : 285
+    Prefetch Hits          : 1
+    Main Memory Accesses   : 1652
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 17.40%
+    Miss Ratio             : 82.60%
+  Number of Accesses: 5000
+    Total Accesses         : 5000
+    L1 Hits                : 175
+    Victim Cache Hits      : 5
+    L2 Hits                : 889
+    Prefetch Hits          : 8
+    Main Memory Accesses   : 3923
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 21.54%
+    Miss Ratio             : 78.46%
+  Number of Accesses: 10000
+    Total Accesses         : 10000
+    L1 Hits                : 307
+    Victim Cache Hits      : 10
+    L2 Hits                : 1975
+    Prefetch Hits          : 14
+    Main Memory Accesses   : 7694
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 23.06%
+    Miss Ratio             : 76.94%
+  Number of Accesses: 50000
+    Total Accesses         : 50000
+    L1 Hits                : 1521
+    Victim Cache Hits      : 48
+    L2 Hits                : 10846
+    Prefetch Hits          : 53
+    Main Memory Accesses   : 37532
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 24.94%
+    Miss Ratio             : 75.06%
+  Number of Accesses: 100000
+    Total Accesses         : 100000
+    L1 Hits                : 3098
+    Victim Cache Hits      : 82
+    L2 Hits                : 21575
+    Prefetch Hits          : 93
+    Main Memory Accesses   : 75152
+    Write Buffer Flushes   : 0
+    Hit Ratio              : 24.85%
+    Miss Ratio             : 75.15%
+==================================================
