@@ -66,33 +66,46 @@ class Processor:
         if not parts:
             return None
             
+        instruction = None
         if parts[0] == 'NOP':
-            return Instruction('NOP')
+            instruction = Instruction('NOP')
+            print(f"Parsed NOP instruction")
         elif len(parts) == 4:  # Three operand instruction
             opcode = parts[0]
             dest = parts[1].strip(',')
             src1 = parts[2].strip(',')
             src2 = parts[3].strip(',')
-            return Instruction(opcode, dest, src1, src2)
+            instruction = Instruction(opcode, dest, src1, src2)
+            print(f"Parsed {opcode} instruction: {dest} ← {src1}, {src2} (ALU/Compute)")
         elif len(parts) == 3:  # Load/Store instruction
             opcode = parts[0]
             if opcode == 'LD':
                 dest = parts[1].strip(',')
                 src1 = parts[2]
-                return Instruction(opcode, dest, src1)
+                instruction = Instruction(opcode, dest, src1)
+                print(f"Parsed LD instruction: {dest} ← {src1} (Memory Load)")
             else:  # Store
                 dest = parts[1].strip(',')
                 src1 = parts[2]
-                return Instruction(opcode, dest, src1)
-        return None
+                instruction = Instruction(opcode, dest, src1)
+                print(f"Parsed SD instruction: {dest} → {src1} (Memory Store)")
+        
+        if instruction:
+            unit = self.get_functional_unit(instruction.opcode)
+            if unit:
+                print(f"  → Assigned to functional unit: {unit}")
+        
+        return instruction
 
     def load_program(self, filename):
+        print("\n=== INSTRUCTION PARSING ===")
         with open(filename, 'r') as f:
             for line in f:  
                 if line.strip():
                     inst = self.parse_instruction(line)
                     if inst:
                         self.instructions.append(inst)
+        print("===========================\n")
 
     def can_issue(self, inst):
         # Check for WAW and WAR hazards
@@ -106,16 +119,25 @@ class Processor:
                     return False
         return True
 
+    def format_instruction(self, inst):
+        if inst.opcode == 'NOP':
+            return "NOP"
+        elif inst.opcode in ['LD', 'SD']:
+            return f"{inst.opcode} {inst.dest or ''} {inst.src1 or ''}"
+        else:
+            return f"{inst.opcode} {inst.dest or ''} {inst.src1 or ''} {inst.src2 or ''}"
+
     def simulate(self):
-        print("Cycle-by-cycle execution:\n")
+        print("=== CYCLE-BY-CYCLE EXECUTION ===")
         instruction_queue = self.instructions.copy()
         
         # Track used functional units per cycle
         used_units = {unit: False for unit in self.functional_units}
         
         while instruction_queue or self.executing:
-            print(f"Cycle {self.current_cycle}:")
-            print("  Instruction packet:")
+            print(f"╔════════════════════════════════════════════════════════════════╗")
+            print(f"║ CYCLE {self.current_cycle:<57}║")
+            print(f"╠════════════════════════════════════════════════════════════════╣")
             
             # Reset functional unit usage for new cycle
             used_units = {unit: False for unit in self.functional_units}
@@ -124,11 +146,16 @@ class Processor:
             issued_this_cycle = []
             remaining_queue = instruction_queue.copy()
             
+            issued_packet = False
+            if remaining_queue:
+                print(f"║ INSTRUCTION PACKET:                                            ║")
+                print(f"╠════════════════════════════════════════════════════════════════╣")
+                issued_packet = True
+            
             while remaining_queue:
                 inst = remaining_queue[0]
                 unit = self.get_functional_unit(inst.opcode)
                 
-                # Can issue if functional unit is free and no hazards
                 if (unit is None or not used_units[unit]) and self.can_issue(inst):
                     inst.issue_cycle = self.current_cycle
                     inst.execute_start = self.current_cycle + 1  # Start execution next cycle
@@ -137,7 +164,12 @@ class Processor:
                     issued_this_cycle.append(inst)
                     if unit:
                         used_units[unit] = True
-                    print(f"    {inst.opcode} {inst.dest or ''} {inst.src1 or ''} {inst.src2 or ''} (Issue)")
+                    formatted_inst = self.format_instruction(inst)
+                    unit_str = f"[{unit}]" if unit else " "
+                    if unit_str != " ":
+                        print(f"║ {formatted_inst:<48} {unit_str:<10}    ║")
+                    else:
+                        print(f"║ {formatted_inst:<58} {unit_str:<10}    ║")
                 else:
                     # Add NOP for unused functional units
                     if not any(used_units.values()):
@@ -146,7 +178,7 @@ class Processor:
                         nop.execute_start = self.current_cycle + 1  # Even NOPs have 1 cycle delay
                         nop.execute_complete = nop.execute_start + nop.latency
                         nop.commit_cycle = nop.execute_complete
-                        print(f"    NOP (Issue)")
+                        print(f"║ NOP                                                [NONE]      ║")
                     break
                 
                 remaining_queue.pop(0)
@@ -158,8 +190,16 @@ class Processor:
                 if inst.execute_complete == self.current_cycle:
                     inst.commit_cycle = self.current_cycle
                     completed_this_cycle.append(inst)
-                    print(f"  Completed: {inst.opcode} {inst.dest or ''} {inst.src1 or ''} {inst.src2 or ''}")
-                
+            
+            # Print completed instructions
+            if completed_this_cycle:
+                if issued_packet:
+                    print(f"╠════════════════════════════════════════════════════════════════╣")
+                print(f"║ COMPLETED INSTRUCTIONS:                                        ║")
+                print(f"╠════════════════════════════════════════════════════════════════╣")
+                for inst in completed_this_cycle:
+                    formatted_inst = self.format_instruction(inst)
+                    print(f"║ {formatted_inst:<58}     ║")
             
             # Remove completed instructions
             for inst in completed_this_cycle:
@@ -170,12 +210,18 @@ class Processor:
                 break
                 
             self.current_cycle += 1
-            print()
+            print(f"╚════════════════════════════════════════════════════════════════╝")
         
-        print("\nFinal execution summary:")
-        print("Instruction\tIssue\tStart\tComplete\tCommit")
+        print(f"╚════════════════════════════════════════════════════════════════╝")
+        print("\n=== FINAL EXECUTION SUMMARY ===")
+        print("╔════════════════════════════════════════════════════════════════════════════════╗")
+        print("║ Instruction         │ Issue │ Start │ Complete │ Commit │ Latency │ Unit       ║")
+        print("╠════════════════════════════════════════════════════════════════════════════════╣")
         for inst in self.completed:
-            print(f"{inst.opcode} {inst.dest or ''} {inst.src1 or ''} {inst.src2 or ''}\t{inst.issue_cycle}\t{inst.execute_start}\t{inst.execute_complete}\t{inst.commit_cycle}")
+            formatted_inst = self.format_instruction(inst)
+            unit = self.get_functional_unit(inst.opcode) or "NONE"
+            print(f"║ {formatted_inst:<18} │ {inst.issue_cycle:^5} │ {inst.execute_start:^5} │ {inst.execute_complete:^8} │ {inst.commit_cycle:^6} │ {inst.latency:^7} │ {unit:<10}  ║")
+        print("╚════════════════════════════════════════════════════════════════════════════════╝")
         print(f"\nTotal cycles: {self.current_cycle - 1}")
 
 if __name__ == "__main__":
