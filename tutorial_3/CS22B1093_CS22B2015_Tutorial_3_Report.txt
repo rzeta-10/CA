@@ -1,0 +1,184 @@
+﻿EXPERIMENT - 3 : TWO LEVEL CACHE IMPLEMENTATION 
+COMPUTER ARCHITECTURE
+ROHAN G                                                                                 HARSHITH B
+CS22B1093                                                                                 CS22B2015
+
+
+
+
+All the source code is available here -
+https://github.com/rzeta-10/CA/tree/main/tutorial_3
+Introduction
+This report presents a simulation study of a multi-level cache memory system, implementing the following components:
+* Level 1 Cache: Direct-mapped with 2K words and 16-word blocks.
+* Level 2 Cache: 4-way set associative with 16K words and 16-word blocks.
+* Main Memory: 64K words.
+* Write Buffer: 4 blocks.
+* Victim Cache: Fully associative with 4 blocks.
+* Prefetch Cache: Separate instruction and data stream buffers, each with 4 blocks.
+The simulation evaluates cache performance under three memory access patterns: Spatial, Temporal, and Random.
+Simulation Methodology
+Access Patterns
+* Spatial Accesses: Sequential addresses simulating workloads with high spatial locality.
+* Temporal Accesses: Frequent reuse of a small hot set of addresses with occasional accesses to cold addresses.
+* Random Accesses: Unpredictable access pattern with no discernible locality.
+Cache Operations
+The simulation models read and write operations with the following behavior:
+* L1 Cache Lookup: Direct mapping with block-based indexing.
+* Victim Cache Check: Upon an L1 miss, the victim cache is checked.
+* L2 Cache Lookup: LRU replacement policy with 4-way set associativity.
+* Main Memory Access: On an L2 miss, data is fetched from main memory.
+* Write Buffer Management: Write-back policy with FIFO-based buffer flushing.
+* Prefetching: Next-block prefetching to instruction or data streams.
+
+
+
+
+GUI OUTPUT : 
+  
+The GUI is an Extended Multi-Level Cache Simulator that visually represents a multi-level caching system with L1 (Direct Mapped Cache), L2 (4-Way Set Associative Cache), and a Victim Cache. 
+It provides controls for running random access tests and auto-simulations, displaying cache hits, misses, and overall performance statistics in a text-based output section. 
+The GUI dynamically updates cache blocks, showing cache replacements and evictions in real time.
+
+
+
+
+
+
+
+
+OBSERVATIONS AND RESULTS: 
+  
+
+The above graph compares hit ratios for a single-level cache and a multi-level cache across varying numbers of accesses (log scale). 
+The multi-level cache consistently achieves higher hit ratios, peaking above 90%, while the single-level cache reaches just under 85%.
+  
+
+The graph shows that as the number of accesses increases, the hit ratios improve for both single-level and multi-level caches. 
+The multi-level cache consistently outperforms the single-level cache, reaching over 90% hit ratio at higher accesses.
+  
+
+The graph indicates that the hit ratio for the extended multi-level cache for random access increases significantly with more accesses, reaching 25%. 
+In contrast, the single-level cache maintains a low and relatively stable hit ratio around 3–4%.
+  
+
+The graph indicates that the extended multi-level cache for random access significantly reduces its miss ratio as accesses increase, dropping to around 75%. 
+In contrast, the single-level cache maintains a consistently high miss ratio near 97%.
+  
+
+The graph shows that the extended multi-level cache maintains a hit ratio around 50%, while the single-level cache consistently remains near 0%.
+  
+
+The single-level cache consistently shows a 100% miss ratio, while the extended multi-level cache maintains a lower miss ratio around 50%.
+
+
+  
+
+The hit ratio difference decreases steadily, reaching around -20%, while the miss ratio difference increases, peaking above 20% as accesses grow.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+The graph compares the temporal hit ratio (%) of two caching mechanisms—Exp01 (Single-Level) and Extended Multi-Level - as a function of the number of accesses (on a logarithmic scale). 
+The Extended Multi-Level approach consistently achieves a slightly higher hit ratio than the Single-Level approach, especially at lower access counts, before both stabilize near 98%.
+
+
+
+
+
+
+
+
+
+
+
+  
+
+The graph compares the temporal miss ratio (%) of Exp01 (Single-Level) and Extended Multi-Level caching mechanisms as a function of the number of accesses (log scale). 
+
+
+The Extended Multi-Level approach consistently achieves a lower miss ratio than the Single-Level approach, especially at lower access counts, before both stabilize below 2%.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+The graph shows the difference in hit and miss ratios between Exp01 (Single-Level) and Extended Multi-Level caching mechanisms for a spatial access pattern. 
+
+
+The hit ratio difference remains negative, indicating that the Extended Multi-Level approach consistently outperforms the Single-Level approach. 
+
+
+The miss ratio difference remains positive, reinforcing that the Single-Level approach has a consistently higher miss rate.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+The graph compares the difference in hit and miss ratios between Exp01 (Single-Level) and Extended Multi-Level caching mechanisms for a temporal access pattern. 
+
+
+The hit ratio difference remains negative, indicating that the Extended Multi-Level approach consistently achieves a higher hit ratio. 
+
+
+Similarly, the miss ratio difference remains positive, confirming that the Single-Level approach has a higher miss rate, though the gap narrows as accesses increase.
